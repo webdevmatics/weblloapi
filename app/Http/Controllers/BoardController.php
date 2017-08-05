@@ -20,41 +20,56 @@ class BoardController extends Controller
 
     public function index()
     {
-        return Board::all();
+
+        return Auth::user()->boards;
     }
 
     public function show($boardId)
     {
-        $board=Board::findOrFail($boardId);
+        $board = Board::findOrFail($boardId);
+
+        if (Auth::user()->id !== $board->user_id) {
+            return response()->json(['status' => 'error', 'message' => 'unauthorized'], 401);
+        }
+
         return $board;
     }
 
     public function store(Request $request)
     {
-        Board::create([
-            'name'=>$request->name,
-            'user_id' => 1,  
+        Auth::user()->boards()->create([
+            'name'    => $request->name,
+        ]);
 
-            ]);
-
-        return response()->json(['message'=>'success'],200);
+        return response()->json(['message' => 'success'], 200);
     }
 
-     public function update(Request $request,$boardId)
+    public function update(Request $request, $boardId)
     {
-        $board=Board::find($boardId);
+        $board = Board::find($boardId);
+
+        if (Auth::user()->id !== $board->user_id) {
+            return response()->json(['status' => 'error', 'message' => 'unauthorized'], 401);
+        }
+
         $board->update($request->all());
 
-        return response()->json(['message'=>'success','board'=>$board],200);
+        return response()->json(['message' => 'success', 'board' => $board], 200);
     }
 
     public function destroy($id)
     {
-        if(Board::destroy($id)) {
-            return response()->json(['status'=>'success','message'=>'Board Deleted Successfully']);
+        $board=Board::find($id);
+
+        if(Auth::user()->id !== $board->user_id) {
+            return response()->json(['status'=>'error','message'=>'unauthorized'],401);
         }
 
-            return response()->json(['status'=>'error','message'=>'Something went wrong']);
+        if (Board::destroy($id)) {
+            return response()->json(['status' => 'success', 'message' => 'Board Deleted Successfully']);
+        }
+
+        return response()->json(['status' => 'error', 'message' => 'Something went wrong']);
 
     }
 }
