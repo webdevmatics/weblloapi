@@ -21,9 +21,17 @@ $app->get('/logout','AuthController@logout');
 $app->post('/register','AuthController@register');
 
 
-$app->get('/boards/{board}','BoardController@show');
 $app->get('/boards','BoardController@index');
-
 $app->post('/boards','BoardController@store');
+$app->get('/boards/{board}','BoardController@show');
 $app->put('/boards/{boards}','BoardController@update');
 $app->delete('/boards/{boards}','BoardController@destroy');
+
+
+$app->get('/boards/{list}/list','ListController@index');
+$app->post('/boards/{list}/list','ListController@store');
+$app->get('/boards/{board}/list/{list}','ListController@show');
+$app->put('/boards/{board}/list/{list}','ListController@update');
+$app->delete('/boards/{board}/list/{list}','ListController@destroy');
+
+
