@@ -28,10 +28,17 @@ $app->put('/boards/{boards}','BoardController@update');
 $app->delete('/boards/{boards}','BoardController@destroy');
 
 
-$app->get('/boards/{list}/list','ListController@index');
-$app->post('/boards/{list}/list','ListController@store');
+$app->get('/boards/{board}/list','ListController@index');
+$app->post('/boards/{board}/list','ListController@store');
 $app->get('/boards/{board}/list/{list}','ListController@show');
 $app->put('/boards/{board}/list/{list}','ListController@update');
 $app->delete('/boards/{board}/list/{list}','ListController@destroy');
+
+
+$app->get('/boards/{board}/list/{list}/card','CardController@index');
+$app->post('/boards/{board}/list/{list}/card','CardController@store');
+$app->get('/boards/{board}/list/{list}/card/{card}','CardController@show');
+$app->put('/boards/{board}/list/{list}/card/{card}','CardController@update');
+$app->delete('/boards/{board}/list/{list}/card/{card}','CardController@destroy');
 
 
